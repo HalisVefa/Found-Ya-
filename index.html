@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Found Ya! — gizli nesne bulmaca oyunu</title>
+<meta name="description" content="Found Ya!, eski oyuncaklarla dolu sahnelerde saklı nesneleri bulduğunuz bir Android bulmaca oyunu. Veto Games tarafından geliştirilmektedir.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#10312F;
+  --paper:#F4EDDF;
+  --paper-dim:#BBB09B;
+  --red:#D2402F;
+  --mustard:#E3A72F;
+  --line:#28514C;
+  --panel:#163B39;
+  color-scheme:dark light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --ground:#F4EDDF;
+    --paper:#10312F;
+    --paper-dim:#5E756F;
+    --red:#B8301F;
+    --mustard:#9A6C08;
+    --line:#DAD0BC;
+    --panel:#EDE4D2;
+  }
+}
+:root[data-theme="light"]{
+  --ground:#F4EDDF; --paper:#10312F; --paper-dim:#5E756F;
+  --red:#B8301F; --mustard:#9A6C08; --line:#DAD0BC; --panel:#EDE4D2;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--paper);
+  font-family:"Bitter",Georgia,"Times New Roman",serif;
+  font-size:17px;
+  line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:50rem;margin:0 auto;padding:0 1.5rem}
+a{color:var(--mustard)}
+a:focus-visible{outline:2px solid var(--mustard);outline-offset:3px;border-radius:2px}
+
+/* hero */
+.hero{padding:5rem 0 3.5rem}
+.wordmark{
+  font-size:clamp(3rem,13vw,6.5rem);
+  font-weight:800;
+  line-height:.95;
+  letter-spacing:-.035em;
+  margin:0;
+}
+.wordmark em{font-style:normal;color:var(--red)}
+.tag{
+  font-size:clamp(1.05rem,2.6vw,1.35rem);
+  font-weight:400;
+  color:var(--paper-dim);
+  margin:1.4rem 0 0;
+  max-width:32rem;
+}
+.status{
+  display:inline-block;
+  margin-top:2rem;
+  border:1.5px solid var(--mustard);
+  color:var(--mustard);
+  border-radius:99px;
+  padding:.3rem 1rem;
+  font-size:.9rem;
+  font-weight:500;
+}
+
+/* scatter */
+.scatter{
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:2.75rem 0 2.5rem;
+  margin:1rem 0 3.5rem;
+}
+.scatter-lead{font-size:.95rem;color:var(--paper-dim);margin:0 0 1.5rem;font-style:italic}
+.items{display:flex;flex-wrap:wrap;gap:.55rem 1.4rem;margin:0;padding:0;list-style:none}
+.items li{font-size:1.18rem;font-weight:500;color:var(--paper)}
+.items li.found{color:var(--red);position:relative}
+.items li.found::after{
+  content:"";position:absolute;left:-.1em;right:-.1em;top:55%;
+  height:2px;background:var(--red);border-radius:2px;
+}
+.items li:nth-child(3n){transform:rotate(-1.4deg)}
+.items li:nth-child(4n){transform:rotate(1.1deg)}
+.items li:nth-child(7n){transform:rotate(-.7deg)}
+
+/* body */
+section{margin:0 0 3.25rem}
+h2{font-size:1.45rem;font-weight:700;letter-spacing:-.015em;margin:0 0 .7rem}
+p{margin:.85rem 0;max-width:38rem}
+ul.plain{padding-left:1.2rem;max-width:38rem}
+ul.plain li{margin:.35rem 0}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:1.4rem 1.6rem;
+  margin:2rem 0;
+}
+.panel h2{font-size:1.15rem}
+.panel p:last-child{margin-bottom:0}
+
+.links{display:flex;flex-wrap:wrap;gap:.9rem;margin:1.25rem 0 0;padding:0;list-style:none}
+.links a{
+  display:inline-block;
+  border:1.5px solid var(--line);
+  border-radius:3px;
+  padding:.5rem 1.05rem;
+  text-decoration:none;
+  color:var(--paper);
+  font-weight:500;
+  font-size:.97rem;
+}
+.links a:hover{border-color:var(--mustard);color:var(--mustard)}
+
+footer{
+  border-top:1px solid var(--line);
+  margin-top:1rem;
+  padding:2rem 0 4rem;
+  color:var(--paper-dim);
+  font-size:.92rem;
+}
+footer p{margin:.4rem 0}
+
+@media (max-width:520px){
+  body{font-size:16.5px}
+  .wrap{padding:0 1.15rem}
+  .hero{padding:3.25rem 0 2.5rem}
+  .items li{font-size:1.06rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1 class="wordmark">Found <em>Ya!</em></h1>
+  <p class="tag">Tozlu bir oyuncak sandığının içinde kaybolmuş elli nesne. Hepsini bulabilecek misin?</p>
+  <span class="status">Kapalı test aşamasında</span>
+</header>
+
+<div class="scatter">
+  <p class="scatter-lead">Bu sahnede aranan nesneler:</p>
+  <ul class="items">
+    <li class="found">kırmızı top</li>
+    <li>lastik ördek</li>
+    <li>tren vagonu</li>
+    <li class="found">topaç</li>
+    <li>teneke robot</li>
+    <li>yoyo</li>
+    <li class="found">oyuncak davul</li>
+    <li>harf küpü</li>
+    <li>yelkenli</li>
+    <li>rüzgar gülü</li>
+    <li class="found">misket</li>
+  </ul>
+</div>
+
+<section>
+  <h2>Oyun hakkında</h2>
+  <p>Found Ya!, elle çizilmiş kalabalık sahnelerde saklanmış nesneleri bulduğun bir bulmaca oyunu. Ekranın altındaki kartlar neyi araman gerektiğini gösteriyor; sahneyi yakınlaştırıp kaydırarak arıyorsun. Üst üste hızlı bulduğunda kombo çarpanı yükseliyor ve bölüm sonunda daha çok altın kazanıyorsun.</p>
+  <p>Sıkıştığında ipucu isteyebilirsin. İpucu, aradığın nesneye kamerayı götürüp kısa bir parıltıyla yerini gösteriyor. İpuçlarını biriktirdiğin altınla ya da isteğe bağlı olarak izlediğin kısa bir reklamla alabiliyorsun.</p>
+  <p>Oyun ücretsiz, reklam destekli. Hesap açman ya da giriş yapman gerekmiyor; ilerlemen yalnızca kendi cihazında saklanıyor.</p>
+</section>
+
+<section>
+  <h2>Nasıl oynanıyor</h2>
+  <ul class="plain">
+    <li>Kart şeridinden aradığın nesneye bak, sahnede gözünle tara.</li>
+    <li>İki parmakla yakınlaştır, tek parmakla sahneyi kaydır.</li>
+    <li>Bulduğun nesneye dokun; kartına doğru uçar ve şerit güncellenir.</li>
+    <li>Arka arkaya hızlı bulmak kombo çarpanını yükseltir.</li>
+    <li>Boş yere dokunmak bölümü bitirmez, sadece kombo barından biraz süre yer.</li>
+  </ul>
+</section>
+
+<div class="panel">
+  <h2>Şu anda kapalı testte</h2>
+  <p>Oyun henüz Google Play'de herkese açık değil. Sınırlı sayıda test kullanıcısıyla birlikte yeni bölümler ekleyip oynanışı oturtuyoruz. Teste katılmak ister misin? Aşağıdaki adresten yaz, davet bağlantısını gönderelim.</p>
+</div>
+
+<section>
+  <h2>İletişim ve belgeler</h2>
+  <p>Geri bildirim, hata bildirimi ve her türlü soru için: <a href="mailto:ORNEK@ORNEK.COM">vetogames52@gmail.com</a></p>
+  <ul class="links">
+    <li><a href="gizlilik.html">Gizlilik Politikası</a></li>
+    <li><a href="kullanim-sartlari.html">Kullanım Şartları</a></li>
+  </ul>
+</section>
+
+<footer>
+  <p><strong>Found Ya!</strong> — Veto Games tarafından geliştirilmektedir.</p>
+  <p>Android için, Google Play üzerinden yayınlanacaktır.</p>
+</footer>
+
+</div>
+</body>
+</html>
